@@ -5,10 +5,10 @@ const path = require('path');
 
 const prisma = new PrismaClient();
 
-// Get all posts
-const findPosts = async (req, res) => {
+// Get all materis
+const findMateris = async (req, res) => {
     try {
-        const posts = await prisma.post.findMany({
+        const materis = await prisma.materi.findMany({
             orderBy: {
                 id: 'desc'
             }
@@ -16,8 +16,8 @@ const findPosts = async (req, res) => {
 
         res.status(200).send({
             success: true,
-            message: "Get all posts successfully",
-            data: posts
+            message: "Get all materis successfully",
+            data: materis
         });
     } catch (error) {
         res.status(500).send({
@@ -27,8 +27,8 @@ const findPosts = async (req, res) => {
     }
 };
 
-// Create a post
-const createPost = async (req, res) => {
+// Create a materi
+const createMateri = async (req, res) => {
     // Check validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,18 +43,18 @@ const createPost = async (req, res) => {
     }
 
     try {
-        const post = await prisma.post.create({
+        const materi = await prisma.materi.create({
             data: {
-                title: req.body.title,
-                content: req.body.content,
+                judul: req.body.judul,
+                deskripsi: req.body.deskripsi,
                 image: req.file ? req.file.filename : null
             }
         });
 
         res.status(201).send({
             success: true,
-            message: "Post created successfully",
-            data: post
+            message: "Materi created successfully",
+            data: materi
         });
     } catch (error) {
         if (req.file) {
@@ -67,26 +67,26 @@ const createPost = async (req, res) => {
     }
 };
 
-// Get single post
-const findPostById = async (req, res) => {
+// Get single materi
+const findMateriById = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const post = await prisma.post.findUnique({
+        const materi = await prisma.materi.findUnique({
             where: { id: Number(id) }
         });
 
-        if (!post) {
+        if (!materi) {
             return res.status(404).send({
                 success: false,
-                message: "Post not found"
+                message: "Materi not found"
             });
         }
 
         res.status(200).send({
             success: true,
-            message: "Get post successfully",
-            data: post
+            message: "Get materi successfully",
+            data: materi
         });
     } catch (error) {
         res.status(500).send({
@@ -96,8 +96,8 @@ const findPostById = async (req, res) => {
     }
 };
 
-// Update a post
-const updatePost = async (req, res) => {
+// Update a materi
+const updateMateri = async (req, res) => {
     const { id } = req.params;
 
     const errors = validationResult(req);
@@ -113,41 +113,41 @@ const updatePost = async (req, res) => {
     }
 
     try {
-        const post = await prisma.post.findUnique({ where: { id: Number(id) } });
+        const materi = await prisma.materi.findUnique({ where: { id: Number(id) } });
 
-        if (!post) {
+        if (!materi) {
             if (req.file) {
                 fs.unlinkSync(req.file.path);
             }
-            return res.status(404).send({ success: false, message: "Post not found" });
+            return res.status(404).send({ success: false, message: "Materi not found" });
         }
 
         let updateData = {
-            title: req.body.title,
-            content: req.body.content
+            judul: req.body.judul,
+            deskripsi: req.body.deskripsi
         };
 
         if (req.file) {
             updateData.image = req.file.filename;
 
             // Delete old image
-            if (post.image) {
-                const oldImagePath = path.join(__dirname, '../public/uploads/', post.image);
+            if (materi.image) {
+                const oldImagePath = path.join(__dirname, '../public/uploads/', materi.image);
                 if (fs.existsSync(oldImagePath)) {
                     fs.unlinkSync(oldImagePath);
                 }
             }
         }
 
-        const updatedPost = await prisma.post.update({
+        const updatedMateri = await prisma.materi.update({
             where: { id: Number(id) },
             data: updateData
         });
 
         res.status(200).send({
             success: true,
-            message: "Post updated successfully",
-            data: updatedPost
+            message: "Materi updated successfully",
+            data: updatedMateri
         });
     } catch (error) {
         if (req.file) {
@@ -160,32 +160,32 @@ const updatePost = async (req, res) => {
     }
 };
 
-// Delete a post
-const deletePost = async (req, res) => {
+// Delete a materi
+const deleteMateri = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const post = await prisma.post.findUnique({ where: { id: Number(id) } });
+        const materi = await prisma.materi.findUnique({ where: { id: Number(id) } });
 
-        if (!post) {
-            return res.status(404).send({ success: false, message: "Post not found" });
+        if (!materi) {
+            return res.status(404).send({ success: false, message: "Materi not found" });
         }
 
         // Delete image
-        if (post.image) {
-            const imagePath = path.join(__dirname, '../public/uploads/', post.image);
+        if (materi.image) {
+            const imagePath = path.join(__dirname, '../public/uploads/', materi.image);
             if (fs.existsSync(imagePath)) {
                 fs.unlinkSync(imagePath);
             }
         }
 
-        await prisma.post.delete({
+        await prisma.materi.delete({
             where: { id: Number(id) }
         });
 
         res.status(200).send({
             success: true,
-            message: "Post deleted successfully"
+            message: "Materi deleted successfully"
         });
     } catch (error) {
         res.status(500).send({
@@ -196,9 +196,9 @@ const deletePost = async (req, res) => {
 };
 
 module.exports = {
-    findPosts,
-    createPost,
-    findPostById,
-    updatePost,
-    deletePost
+    findMateris,
+    createMateri,
+    findMateriById,
+    updateMateri,
+    deleteMateri
 };

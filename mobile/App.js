@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import IndexScreen from './src/screens/IndexScreen';
 import CreateScreen from './src/screens/CreateScreen';
 import EditScreen from './src/screens/EditScreen';
+import QuizScreen from './src/screens/QuizScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,17 +27,22 @@ export default function App() {
         <Stack.Screen 
           name="Index" 
           component={IndexScreen} 
-          options={{ title: 'Data Posts' }} 
+          options={{ title: 'Media Pembelajaran' }} 
         />
         <Stack.Screen 
           name="Create" 
           component={CreateScreen} 
-          options={{ title: 'Tambah Post' }} 
+          options={{ title: 'Tambah Materi' }} 
         />
         <Stack.Screen 
           name="Edit" 
           component={EditScreen} 
-          options={{ title: 'Edit Post' }} 
+          options={{ title: 'Edit Materi' }} 
+        />
+        <Stack.Screen 
+          name="Quiz" 
+          component={QuizScreen} 
+          options={{ title: 'Kuis Evaluasi' }} 
         />
       </Stack.Navigator>
     </NavigationContainer>

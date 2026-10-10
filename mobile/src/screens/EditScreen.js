@@ -5,8 +5,8 @@ import API from '../services/Api';
 export default function EditScreen({ route, navigation }) {
     const { id } = route.params;
 
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [judul, setJudul] = useState('');
+    const [deskripsi, setDeskripsi] = useState('');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -14,9 +14,9 @@ export default function EditScreen({ route, navigation }) {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await API.get(`/posts/${id}`);
-                setTitle(response.data.data.title);
-                setContent(response.data.data.content);
+                const response = await API.get(`/materi/${id}`);
+                setJudul(response.data.data.judul);
+                setDeskripsi(response.data.data.deskripsi);
             } catch (error) {
                 ToastAndroid.show('Gagal mengambil data post', ToastAndroid.SHORT);
                 navigation.goBack();
@@ -34,11 +34,11 @@ export default function EditScreen({ route, navigation }) {
 
         try {
             const formData = new FormData();
-            formData.append('title', title);
-            formData.append('content', content);
+            formData.append('judul', judul);
+            formData.append('deskripsi', deskripsi);
             formData.append('_method', 'PUT'); // If backend requires method spoofing, though Express router.put handles it if we send standard PUT. For multipart, some use method spoofing. We will just use axios.put if json, but since multipart formData with PUT sometimes has issues, we can try API.put directly.
 
-            await API.put(`/posts/${id}`, formData, {
+            await API.put(`/materi/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -73,27 +73,27 @@ export default function EditScreen({ route, navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.formGroup}>
-                <Text style={styles.label}>Title</Text>
+                <Text style={styles.label}>Judul Materi</Text>
                 <TextInput
-                    style={[styles.input, errors.title && styles.inputError]}
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder="Masukkan Title"
+                    style={[styles.input, errors.judul && styles.inputError]}
+                    value={judul}
+                    onChangeText={setJudul}
+                    placeholder="Masukkan Judul Materi"
                 />
-                {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
+                {errors.judul && <Text style={styles.errorText}>{errors.judul}</Text>}
             </View>
 
             <View style={styles.formGroup}>
-                <Text style={styles.label}>Content</Text>
+                <Text style={styles.label}>Isi Materi</Text>
                 <TextInput
-                    style={[styles.input, styles.textArea, errors.content && styles.inputError]}
-                    value={content}
-                    onChangeText={setContent}
-                    placeholder="Masukkan Content"
+                    style={[styles.input, styles.textArea, errors.deskripsi && styles.inputError]}
+                    value={deskripsi}
+                    onChangeText={setDeskripsi}
+                    placeholder="Masukkan Isi Materi"
                     multiline
                     numberOfLines={4}
                 />
-                {errors.content && <Text style={styles.errorText}>{errors.content}</Text>}
+                {errors.deskripsi && <Text style={styles.errorText}>{errors.deskripsi}</Text>}
             </View>
 
             <TouchableOpacity 

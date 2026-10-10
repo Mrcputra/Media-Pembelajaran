@@ -10,7 +10,7 @@ export default function IndexScreen({ navigation }) {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            const response = await API.get('/posts');
+            const response = await API.get('/materi');
             setPosts(response.data.data);
         } catch (error) {
             ToastAndroid.show('Gagal mengambil data', ToastAndroid.SHORT);
@@ -35,7 +35,7 @@ export default function IndexScreen({ navigation }) {
                     text: "Hapus", 
                     onPress: async () => {
                         try {
-                            await API.delete(`/posts/${id}`);
+                            await API.delete(`/materi/${id}`);
                             ToastAndroid.show('Data berhasil dihapus', ToastAndroid.SHORT);
                             fetchPosts();
                         } catch (error) {
@@ -57,7 +57,7 @@ export default function IndexScreen({ navigation }) {
             <View style={styles.card}>
                 <Image source={{ uri: imageUrl }} style={styles.image} />
                 <View style={styles.cardBody}>
-                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.title}>{item.judul}</Text>
                     <View style={styles.actionButtons}>
                         <TouchableOpacity 
                             style={[styles.button, styles.btnEdit]} 
@@ -77,6 +77,26 @@ export default function IndexScreen({ navigation }) {
         );
     };
 
+    const renderHeader = () => (
+        <View style={styles.headerContainer}>
+            <Text style={styles.headerTitle}>MODUL AJAR INFORMATIKA</Text>
+            <Text style={styles.headerText}>Nama: Muhamad Rizqi Cahyadi Putra</Text>
+            <Text style={styles.headerText}>Materi: Topologi Jaringan Komputer</Text>
+            <Text style={styles.headerText}>Model: Problem-Based Learning</Text>
+            <Text style={styles.headerSub}>Tujuan Pembelajaran:</Text>
+            <Text style={styles.headerList}>1. Menjelaskan konsep dasar topologi</Text>
+            <Text style={styles.headerList}>2. Menganalisis kelebihan & kekurangan</Text>
+            <Text style={styles.headerList}>3. Menentukan desain topologi efisien</Text>
+            
+            <TouchableOpacity 
+                style={styles.quizButton}
+                onPress={() => navigation.navigate('Quiz')}
+            >
+                <Text style={styles.quizButtonText}>Mulai Kuis Evaluasi</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
         <View style={styles.container}>
             {loading ? (
@@ -86,6 +106,7 @@ export default function IndexScreen({ navigation }) {
                     data={posts}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
+                    ListHeaderComponent={renderHeader}
                     contentContainerStyle={styles.list}
                     ListEmptyComponent={<Text style={styles.emptyText}>Tidak ada data.</Text>}
                 />
@@ -105,6 +126,47 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
+    },
+    headerContainer: {
+        backgroundColor: '#fff',
+        padding: 16,
+        marginBottom: 16,
+        borderRadius: 8,
+        elevation: 2,
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 8,
+        color: '#007bff',
+    },
+    headerText: {
+        fontSize: 14,
+        color: '#333',
+        marginBottom: 4,
+    },
+    headerSub: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 12,
+        marginBottom: 4,
+    },
+    headerList: {
+        fontSize: 14,
+        color: '#555',
+        marginLeft: 8,
+    },
+    quizButton: {
+        backgroundColor: '#28a745',
+        padding: 12,
+        borderRadius: 8,
+        marginTop: 16,
+        alignItems: 'center',
+    },
+    quizButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     loader: {
         flex: 1,

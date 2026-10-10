@@ -3,8 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator,
 import API from '../services/Api';
 
 export default function CreateScreen({ navigation }) {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [judul, setJudul] = useState('');
+    const [deskripsi, setDeskripsi] = useState('');
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -18,11 +18,11 @@ export default function CreateScreen({ navigation }) {
             // If image is required, we use FormData. Here we focus on standard text fields and optional image.
             
             const formData = new FormData();
-            formData.append('title', title);
-            formData.append('content', content);
+            formData.append('judul', judul);
+            formData.append('deskripsi', deskripsi);
             // formData.append('image', { uri: '...', type: 'image/jpeg', name: 'photo.jpg' });
 
-            await API.post('/posts', formData, {
+            await API.post('/materi', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
@@ -49,27 +49,27 @@ export default function CreateScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.formGroup}>
-                <Text style={styles.label}>Title</Text>
+                <Text style={styles.label}>Judul Materi</Text>
                 <TextInput
-                    style={[styles.input, errors.title && styles.inputError]}
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder="Masukkan Title"
+                    style={[styles.input, errors.judul && styles.inputError]}
+                    value={judul}
+                    onChangeText={setJudul}
+                    placeholder="Masukkan Judul Materi"
                 />
-                {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
+                {errors.judul && <Text style={styles.errorText}>{errors.judul}</Text>}
             </View>
 
             <View style={styles.formGroup}>
-                <Text style={styles.label}>Content</Text>
+                <Text style={styles.label}>Isi Materi</Text>
                 <TextInput
-                    style={[styles.input, styles.textArea, errors.content && styles.inputError]}
-                    value={content}
-                    onChangeText={setContent}
-                    placeholder="Masukkan Content"
+                    style={[styles.input, styles.textArea, errors.deskripsi && styles.inputError]}
+                    value={deskripsi}
+                    onChangeText={setDeskripsi}
+                    placeholder="Masukkan Isi Materi"
                     multiline
                     numberOfLines={4}
                 />
-                {errors.content && <Text style={styles.errorText}>{errors.content}</Text>}
+                {errors.deskripsi && <Text style={styles.errorText}>{errors.deskripsi}</Text>}
             </View>
 
             <TouchableOpacity 

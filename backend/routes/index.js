@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 const upload = require('../utils/upload');
 const { body } = require('express-validator');
-const postController = require('../controllers/PostController');
+const materiController = require('../controllers/MateriController');
 
 // Validation rule for create
-const validatePost = [
-    body('title').notEmpty().withMessage('Title is required'),
-    body('content').notEmpty().withMessage('Content is required'),
+const validateMateri = [
+    body('judul').notEmpty().withMessage('Title is required'),
+    body('deskripsi').notEmpty().withMessage('Content is required'),
 ];
 
-router.get('/posts', postController.findPosts);
-router.post('/posts', upload.single('image'), validatePost, postController.createPost);
-router.get('/posts/:id', postController.findPostById);
-router.put('/posts/:id', upload.single('image'), validatePost, postController.updatePost);
-router.delete('/posts/:id', postController.deletePost);
+router.get('/materi', materiController.findMateris);
+router.post('/materi', upload.single('image'), validateMateri, materiController.createMateri);
+router.get('/materi/:id', materiController.findMateriById);
+router.put('/materi/:id', upload.single('image'), validateMateri, materiController.updateMateri);
+router.delete('/materi/:id', materiController.deleteMateri);
 
 module.exports = router;
